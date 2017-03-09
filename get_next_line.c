@@ -133,7 +133,7 @@ int		get_next_line(int fd, char **line)
 }
 
 
-/*
+
 
  int		main(void)
 {
@@ -194,4 +194,4 @@ int		get_next_line(int fd, char **line)
      
 }
 
-*/
+
