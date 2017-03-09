@@ -142,8 +142,8 @@ int		get_next_line(int fd, char **line)
     int r;
     
     r = 1;
-    int fd1 = open("/nfs/2016/m/nekitoss/Desktop/getnextline/getnextline/text.txt", O_RDONLY);
-    //	int fd2 = open("/nfs/2016/n/nyatsulk/get_next_line/text2", O_RDONLY);
+    int fd1 = open("text.txt", O_RDONLY);
+    //	int fd2 = open("text2", O_RDONLY);
     
 //    int			fd;
 //    int			ret;
