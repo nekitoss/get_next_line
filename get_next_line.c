@@ -65,7 +65,7 @@ int		get_next_line(int fd, char **line)
        //     break ;
 		
 		//curr->r_len = read(fd, buf, BUF_SIZE);
-		curr->clr = curr->str;
+		(curr->clr) = curr->str;
 		curr->str = ft_strjoin(curr->str, buf);
 		ft_strdel(&(curr->clr));
         ft_bzero(buf, BUF_SIZE + 1);
@@ -90,8 +90,9 @@ int		get_next_line(int fd, char **line)
 		else
         {*/
 			//*line = ft_strnew(0);
+            ft_strdel(&(curr->str));
             ft_strdel(&buf);
-
+        
             return (0);
         //}
        /* if (curr->end)
@@ -104,7 +105,7 @@ int		get_next_line(int fd, char **line)
 	}
 	//ft_strdel(&buf);
 //	EOF == read(fd, buf, BUF_SIZE);
-	curr->clr = curr->str;
+    (curr->clr) = curr->str;
     n = ft_strchr(curr->str, '\n');
     if (!n)
     {
@@ -118,7 +119,7 @@ int		get_next_line(int fd, char **line)
         *line = ft_strsub(curr->str, 0, n - curr->str);
 //        if (!(**line))
 //        {
-//            curr->str = curr->clr;
+//            curr->str = curr->;
 //            *line = ft_strsub(curr->str, 0, n - curr->str);
 //        }
 //        printf("line=%s\n", *line);
@@ -142,46 +143,8 @@ int		get_next_line(int fd, char **line)
     int r;
     
     r = 1;
-    int fd1 = open("text.txt", O_RDONLY);
-    //	int fd2 = open("text2", O_RDONLY);
-    
-//    int			fd;
-//    int			ret;
-//    int			count_lines;
-//    char		*filename;
-//    int			errors;
-//    
-//    filename = "/nfs/2016/m/nekitoss/Desktop/getnextline/getnextline/text.txt";
-//    fd = open(filename, O_RDONLY);
-//    if (fd > 2)
-//    {
-//        count_lines = 0;
-//        errors = 0;
-//        line = NULL;
-//        while ((ret = get_next_line(fd, &line)) > 0)
-//        {
-//            if (count_lines == 0 && strcmp(line, "1234567890abcde") != 0)
-//                errors++;
-//            if (count_lines == 1 && strcmp(line, "fghijklmnopqrst") != 0)
-//                errors++;
-//            count_lines++;
-//            if (count_lines > 50)
-//                break ;
-//        }
-//        close(fd);
-//        if (count_lines != 2)
-//            printf("-> must have returned '1' twice instead of %d time(s)\n", count_lines);
-//        if (errors > 0)
-//            printf("-> must have read \"1234567890abcde\" and \"fghijklmnopqrst\"\n");
-//        if (count_lines == 2 && errors == 0)
-//            printf("OK\n");
-//    }
-//    else
-//        printf("An error occured while opening file %s\n", filename);
-//    return (0);
-    
-   
- 
+    int fd1 = open(".ß/text.txt", O_RDONLY);
+
     while (r > 0)
     {
         r = get_next_line(fd1, &line);
