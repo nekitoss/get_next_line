@@ -12,22 +12,19 @@
 
 #ifndef GET_NEXT_LINE_H
 # define GET_NEXT_LINE_H
-
 # define BUF_SIZE 10
 # include "./libft.h"
-//# include <string.h>
-//#include "libft.a"
 
 typedef struct	s_lost
 {
-	int		fd;
-	char	*str;
-	int		r_len;
-	char	*clr;
+	int				fd;
+	char			*str;
+	int				r_len;
+	char			*clr;
 	struct s_lost	*next;
-    int     end;
+	int				end;
 }				t_list_n;
 
-int		get_next_line(int fd, char **line);
+int				get_next_line(int fd, char **line);
 
 #endif
