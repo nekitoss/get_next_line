@@ -84,19 +84,3 @@ int		get_next_line(int fd, char **line)
 	ft_strdel(&buf);
 	return (1);
 }
-
-int		main(void)
-{
-	char	*line;
-	int r = 1;
-	int fd1 = open("./text.txt", O_RDONLY);
-
-	while (r > 0)
-	{
-		r = get_next_line(fd1, &line);
-		printf("%s|", line);
-		printf("r=%d\n", r);
-		line = NULL;
-	}
-	return (0);
-}
