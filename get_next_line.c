@@ -40,7 +40,7 @@ t_list_n	*init_it(t_list_n **head, int fd)
 	return (tmp->next);
 }
 
-int		get_next_line(int fd, char **line)
+int			get_next_line(int fd, char **line)
 {
 	char			*buf;
 	static t_list_n	*head;
@@ -51,7 +51,9 @@ int		get_next_line(int fd, char **line)
 	if (fd < 0 || !line || !(buf = ft_strnew(BUF_SIZE)) || BUF_SIZE < 1)
 		return (-1);
 	curr = init_it(&head, fd);
-	while ((n = ft_strchr(curr->str, '\n')) == NULL && (curr->r_len = read(fd, (curr->str) ? buf : (curr->str = ft_strnew(BUF_SIZE)), BUF_SIZE)) == BUF_SIZE && !(n = ft_strchr(curr->str, '\n')))
+	while ((n = ft_strchr(curr->str, '\n')) == NULL &&
+		(curr->r_len = read(fd, (curr->str) ? buf : (curr->str = ft_strnew(BUF_SIZE)), BUF_SIZE)) == BUF_SIZE
+		&& !(n = ft_strchr(curr->str, '\n')))
 	{
 		(curr->clr) = curr->str;
 		curr->str = ft_strjoin(curr->str, buf);
