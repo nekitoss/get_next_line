@@ -11,7 +11,6 @@
 /* ************************************************************************** */
 
 #include "get_next_line.h"
-
 #include <fcntl.h>
 #include <stdio.h>
 
@@ -25,8 +24,8 @@ t_list_n	*init_it(t_list_n **head, int fd)
 		(*head)->fd = fd;
 		(*head)->next = NULL;
 		(*head)->str = NULL;
-        (*head)->end = 0;
-        return (*head);
+		(*head)->end = 0;
+		return (*head);
 	}
 	tmp = (*head);
 	while (fd != tmp->fd && tmp->next)
@@ -37,124 +36,67 @@ t_list_n	*init_it(t_list_n **head, int fd)
 	tmp->next->fd = fd;
 	tmp->next->next = NULL;
 	tmp->next->str = NULL;
-    tmp->next->end = 0;
+	tmp->next->end = 0;
 	return (tmp->next);
 }
 
 int		get_next_line(int fd, char **line)
 {
-	char		*buf;
+	char			*buf;
 	static t_list_n	*head;
 	t_list_n		*curr;
-	char		*n;
+	char			*n;
 
 	n = NULL;
 	if (fd < 0 || !line || !(buf = ft_strnew(BUF_SIZE)) || BUF_SIZE < 1)
 		return (-1);
 	curr = init_it(&head, fd);
-	
-
-    //curr->r_len = read(fd, (curr->str) ? buf : (curr->str = ft_strnew(BUF_SIZE)), BUF_SIZE);
-	while ((n = ft_strchr(curr->str, '\n')) == NULL &&
-        (curr->r_len = read(fd, (curr->str) ? buf : (curr->str = ft_strnew(BUF_SIZE)), BUF_SIZE)) == BUF_SIZE
-        &&
-        !(n = ft_strchr(curr->str, '\n'))
-           )//           ||           !(n = ft_strchr(buf, '\n'))           )
+	while ((n = ft_strchr(curr->str, '\n')) == NULL && (curr->r_len = read(fd, (curr->str) ? buf : (curr->str = ft_strnew(BUF_SIZE)), BUF_SIZE)) == BUF_SIZE && !(n = ft_strchr(curr->str, '\n')))
 	{
-       //if ((n = ft_strchr(curr->str, '\n')) != NULL)
-       //     break ;
-		
-		//curr->r_len = read(fd, buf, BUF_SIZE);
 		(curr->clr) = curr->str;
 		curr->str = ft_strjoin(curr->str, buf);
 		ft_strdel(&(curr->clr));
-        ft_bzero(buf, BUF_SIZE + 1);
+		ft_bzero(buf, BUF_SIZE + 1);
 	}
-    
-    if (*buf)
-        curr->str = ft_strjoin(curr->str, buf);
-	//ft_strdel(&buf);
-	//if ((curr->r_len < BUF_SIZE && (curr->r_len = read(fd, buf, BUF_SIZE)) == 0) && !(curr->str[0]) && n != (ft_strchr(curr->str, '\0')))
-    if (curr->r_len < 0)
-        return (-1);
-    if (
-         curr->r_len == 0
-         &&
-         (curr->str[0] == '\0')
-         //&&
-         //(curr->r_len = read(fd, buf, BUF_SIZE)) == 0
-        )
-	{/*
-		if ((curr->str[0]) && n != (ft_strchr(curr->str, '\0')))
-			*line = ft_strsub(curr-> str, 0, n - (curr->str));
-		else
-        {*/
-			//*line = ft_strnew(0);
-            ft_strdel(&(curr->str));
-            ft_strdel(&buf);
-        
-            return (0);
-        //}
-       /* if (curr->end)
-            return (0);
-        else
-        {
-            curr->end = 1;
-            return (1);
-        }*/
+	if (*buf)
+		curr->str = ft_strjoin(curr->str, buf);
+	if (curr->r_len < 0)
+		return (-1);
+	if (curr->r_len == 0 && (curr->str[0] == '\0'))
+	{
+		ft_strdel(&(curr->str));
+		ft_strdel(&buf);
+		return (0);
 	}
-	//ft_strdel(&buf);
-//	EOF == read(fd, buf, BUF_SIZE);
-    (curr->clr) = curr->str;
-    n = ft_strchr(curr->str, '\n');
-    if (!n)
-    {
-        *line = ft_strdup(curr->str);
-        curr->str = ft_strnew(0);
-        
-    }
-    else
-    {
-        //printf("str=%s\n", curr->str);
-        *line = ft_strsub(curr->str, 0, n - curr->str);
-//        if (!(**line))
-//        {
-//            curr->str = curr->;
-//            *line = ft_strsub(curr->str, 0, n - curr->str);
-//        }
-//        printf("line=%s\n", *line);
-        curr->str = ft_strsub(curr->str, n - curr->str + 1, ft_strlen(curr->str));
-    }
-    //curr->str = n++;
-
-    ft_strdel(&(curr->clr));
-    ft_strdel(&buf);
-
+	(curr->clr) = curr->str;
+	n = ft_strchr(curr->str, '\n');
+	if (!n)
+	{
+		*line = ft_strdup(curr->str);
+		curr->str = ft_strnew(0);
+	}
+	else
+	{
+		*line = ft_strsub(curr->str, 0, n - curr->str);
+		curr->str = ft_strsub(curr->str, n - curr->str + 1, ft_strlen(curr->str));
+	}
+	ft_strdel(&(curr->clr));
+	ft_strdel(&buf);
 	return (1);
 }
 
-
-
-
- int		main(void)
+int		main(void)
 {
+	char	*line;
+	int r = 1;
+	int fd1 = open("./text.txt", O_RDONLY);
 
-    char	*line;
-    int r;
-    
-    r = 1;
-    int fd1 = open(".ß/text.txt", O_RDONLY);
-
-    while (r > 0)
-    {
-        r = get_next_line(fd1, &line);
-        printf("%s|", line);
-        printf("r=%d\n", r);
-        line = NULL;
-    }
- 
-    return (0);
-     
+	while (r > 0)
+	{
+		r = get_next_line(fd1, &line);
+		printf("%s|", line);
+		printf("r=%d\n", r);
+		line = NULL;
+	}
+	return (0);
 }
-
-
