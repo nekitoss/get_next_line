@@ -11,18 +11,16 @@
 /* ************************************************************************** */
 
 #include "get_next_line.h"
-#include <fcntl.h>
-#include <stdio.h>
 
-void	init_it(t_list_n *list)
+void	init_it(t_list_n **ls, int fd)
 {
-	if (!list)
+	if (!(ls[fd]))
 	{
-		list = (t_list_n *)malloc(sizeof(t_list_n));
-		list->str = NULL;
-		list->clr = NULL;
-		list->end = 0;
-		list->r_len = 0;
+		(ls[fd]) = (t_list_n *)malloc(sizeof(t_list_n));
+		(ls[fd])->str = NULL;
+		(ls[fd])->clr = NULL;
+		(ls[fd])->end = 0;
+		(ls[fd])->r_len = 0;
 	}
 }
 
@@ -33,9 +31,10 @@ int			get_next_line(int fd, char **line)
 	char			*n;
 
 	n = NULL;
-	if (fd < 0 || !line || !(buf = ft_strnew(BUF_SIZE)) || BUF_SIZE < 1)
+	if (fd < 0 || !line || BUF_SIZE < 1)//|| !(buf = ft_strnew(BUF_SIZE))
 		return (-1);
-	init_it((ls[fd]));
+    buf = ft_strnew(BUF_SIZE);
+	init_it(ls, fd);
 	while ((n = ft_strchr((ls[fd])->str, '\n')) == NULL &&
 		((ls[fd])->r_len = read(fd, ((ls[fd])->str) ? buf : ((ls[fd])->str = ft_strnew(BUF_SIZE)), BUF_SIZE)) == BUF_SIZE
 		&& !(n = ft_strchr((ls[fd])->str, '\n')))
@@ -45,17 +44,25 @@ int			get_next_line(int fd, char **line)
 		//ft_strdel(&((ls[fd])->clr));
 		ft_bzero(buf, BUF_SIZE + 1);
 	}
+	((ls[fd])->clr) = (ls[fd])->str;
 	if (*buf)
+	{
 		(ls[fd])->str = ft_strjoin((ls[fd])->str, buf);
+		//ft_strdel(&((ls[fd])->clr));
+	}
 	if ((ls[fd])->r_len < 0)
+	{
+		//ft_strdel(&((ls[fd])->str));
+		ft_strdel(&buf);
 		return (-1);
-	if ((ls[fd])->r_len == 0 && ((ls[fd])->str[0] == '\0'))
+	}
+	if ((ls[fd])->r_len == 0 && (ls[fd])->str &&((ls[fd])->str[0] == '\0'))
 	{
 		ft_strdel(&((ls[fd])->str));
 		ft_strdel(&buf);
 		return (0);
 	}
-	((ls[fd])->clr) = (ls[fd])->str;
+	
 	n = ft_strchr((ls[fd])->str, '\n');
 	if (!n)
 	{
@@ -64,6 +71,11 @@ int			get_next_line(int fd, char **line)
 	}
 	else
 	{
+		// int z = n - (ls[fd])->str;
+		// *line = ft_strsub((ls[fd])->str, 0, z);
+		// int a = n - (ls[fd])->str + 1;
+		// int b = ft_strlen((ls[fd])->str);
+		// (ls[fd])->str = ft_strsub((ls[fd])->str, a, b);
 		*line = ft_strsub((ls[fd])->str, 0, n - (ls[fd])->str);
 		(ls[fd])->str = ft_strsub((ls[fd])->str, n - (ls[fd])->str + 1, ft_strlen((ls[fd])->str));
 	}
@@ -71,3 +83,4 @@ int			get_next_line(int fd, char **line)
 	ft_strdel(&buf);
 	return (1);
 }
+
