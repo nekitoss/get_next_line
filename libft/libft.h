@@ -40,7 +40,7 @@ char			*ft_strcat(char *s1, const char *s2);
 void			ft_strclr(char *s);
 char			*ft_strncat(char *s1, const char *s2, size_t n);
 size_t			ft_strlcat(char *s1, const char *s2, size_t n);
-char			*ft_strchr(char *s, int c);
+char			*ft_strchr(const char *s, int c);
 char			*ft_strrchr(char *s, int c);
 char			*ft_strstr(const char *big, const char *little);
 char			*ft_strnstr(const char *big, const char *s2, size_t len);
