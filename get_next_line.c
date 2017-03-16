@@ -57,7 +57,7 @@ int			get_next_line(int fd, char **line)
 	{
 		(curr->clr) = curr->str;
 		curr->str = ft_strjoin(curr->str, buf);
-		ft_strdel(&(curr->clr));
+		//ft_strdel(&(curr->clr));
 		ft_bzero(buf, BUF_SIZE + 1);
 	}
 	if (*buf)
