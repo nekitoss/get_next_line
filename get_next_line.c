@@ -14,75 +14,60 @@
 #include <fcntl.h>
 #include <stdio.h>
 
-t_list_n	*init_it(t_list_n **head, int fd)
+void	init_it(t_list_n *list)
 {
-	t_list_n	*tmp;
-
-	if (!(*head))
+	if (!list)
 	{
-		*head = (t_list_n *)malloc(sizeof(t_list_n));
-		(*head)->fd = fd;
-		(*head)->next = NULL;
-		(*head)->str = NULL;
-		(*head)->end = 0;
-		return (*head);
+		list = (t_list_n *)malloc(sizeof(t_list_n));
+		list->str = NULL;
+		list->clr = NULL;
+		list->end = 0;
+		list->r_len = 0;
 	}
-	tmp = (*head);
-	while (fd != tmp->fd && tmp->next)
-		tmp = tmp->next;
-	if (fd == tmp->fd)
-		return (tmp);
-	tmp->next = (t_list_n *)malloc(sizeof(t_list_n));
-	tmp->next->fd = fd;
-	tmp->next->next = NULL;
-	tmp->next->str = NULL;
-	tmp->next->end = 0;
-	return (tmp->next);
 }
 
 int			get_next_line(int fd, char **line)
 {
 	char			*buf;
-	static t_list_n	*head;
-	t_list_n		*curr;
+	static t_list_n	*ls[5000];
 	char			*n;
 
 	n = NULL;
 	if (fd < 0 || !line || !(buf = ft_strnew(BUF_SIZE)) || BUF_SIZE < 1)
 		return (-1);
-	curr = init_it(&head, fd);
-	while ((n = ft_strchr(curr->str, '\n')) == NULL &&
-		(curr->r_len = read(fd, (curr->str) ? buf : (curr->str = ft_strnew(BUF_SIZE)), BUF_SIZE)) == BUF_SIZE
-		&& !(n = ft_strchr(curr->str, '\n')))
+	init_it((ls[fd]));
+	while ((n = ft_strchr((ls[fd])->str, '\n')) == NULL &&
+		((ls[fd])->r_len = read(fd, ((ls[fd])->str) ? buf : ((ls[fd])->str = ft_strnew(BUF_SIZE)), BUF_SIZE)) == BUF_SIZE
+		&& !(n = ft_strchr((ls[fd])->str, '\n')))
 	{
-		(curr->clr) = curr->str;
-		curr->str = ft_strjoin(curr->str, buf);
-		//ft_strdel(&(curr->clr));
+		((ls[fd])->clr) = (ls[fd])->str;
+		(ls[fd])->str = ft_strjoin((ls[fd])->str, buf);
+		//ft_strdel(&((ls[fd])->clr));
 		ft_bzero(buf, BUF_SIZE + 1);
 	}
 	if (*buf)
-		curr->str = ft_strjoin(curr->str, buf);
-	if (curr->r_len < 0)
+		(ls[fd])->str = ft_strjoin((ls[fd])->str, buf);
+	if ((ls[fd])->r_len < 0)
 		return (-1);
-	if (curr->r_len == 0 && (curr->str[0] == '\0'))
+	if ((ls[fd])->r_len == 0 && ((ls[fd])->str[0] == '\0'))
 	{
-		ft_strdel(&(curr->str));
+		ft_strdel(&((ls[fd])->str));
 		ft_strdel(&buf);
 		return (0);
 	}
-	(curr->clr) = curr->str;
-	n = ft_strchr(curr->str, '\n');
+	((ls[fd])->clr) = (ls[fd])->str;
+	n = ft_strchr((ls[fd])->str, '\n');
 	if (!n)
 	{
-		*line = ft_strdup(curr->str);
-		curr->str = ft_strnew(0);
+		*line = ft_strdup((ls[fd])->str);
+		(ls[fd])->str = ft_strnew(0);
 	}
 	else
 	{
-		*line = ft_strsub(curr->str, 0, n - curr->str);
-		curr->str = ft_strsub(curr->str, n - curr->str + 1, ft_strlen(curr->str));
+		*line = ft_strsub((ls[fd])->str, 0, n - (ls[fd])->str);
+		(ls[fd])->str = ft_strsub((ls[fd])->str, n - (ls[fd])->str + 1, ft_strlen((ls[fd])->str));
 	}
-	ft_strdel(&(curr->clr));
+	ft_strdel(&((ls[fd])->clr));
 	ft_strdel(&buf);
 	return (1);
 }

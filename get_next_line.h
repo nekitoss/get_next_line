@@ -17,11 +17,9 @@
 
 typedef struct	s_lost
 {
-	int				fd;
 	char			*str;
 	int				r_len;
 	char			*clr;
-	struct s_lost	*next;
 	int				end;
 }				t_list_n;
 
