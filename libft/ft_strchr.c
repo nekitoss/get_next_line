@@ -12,11 +12,11 @@
 
 #include "libft.h"
 
-char	*ft_strchr(char *s, int c)
+char    *ft_strchr(const char *s, int c)
 {
-	size_t i;
-
-	i = 0;
+    size_t i;
+    
+    i = 0;
     if (s)
     {
         if (c != 0)
@@ -26,11 +26,11 @@ char	*ft_strchr(char *s, int c)
                 if (s[i] != c)
                     i++;
                 else
-                    return (&s[i]);
+                    return ((char *)&s[i]);
             }
         }
         else
-            return (&s[ft_strlen(s)]);
+            return ((char *)&s[ft_strlen(s)]);
     }
-	return (NULL);
+    return (NULL);
 }

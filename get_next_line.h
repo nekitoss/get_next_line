@@ -12,16 +12,14 @@
 
 #ifndef GET_NEXT_LINE_H
 # define GET_NEXT_LINE_H
-# define BUF_SIZE 10
+# define BUF_SIZE 1
 # include "./libft.h"
 
 typedef struct	s_lost
 {
-	int				fd;
 	char			*str;
 	int				r_len;
 	char			*clr;
-	struct s_lost	*next;
 	int				end;
 }				t_list_n;
 

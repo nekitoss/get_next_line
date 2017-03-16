@@ -11,8 +11,16 @@
 /* ************************************************************************** */
 
 #include "libft.h"
-
 char	*ft_strnew(size_t size)
 {
-	return ((char *)ft_memalloc(size + 1));
+	char	*p;
+	size_t	i;
+
+	i = -1;
+	if ((p = (char *)malloc((size + 1) * (sizeof(char)))) == NULL)
+		return (NULL);
+	while (++i < size)
+		p[i] = 0;
+	p[i] = '\0';
+	return (p);
 }
